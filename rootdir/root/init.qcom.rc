@@ -458,12 +458,6 @@ service cnd /system/bin/cnd
     socket cnd stream 660 root inet
     writepid /dev/cpuset/system-background/tasks
 
-service dpmd /system/bin/dpmd
-    class late_start
-    socket dpmd stream 660 root system
-    group system readproc
-    writepid /dev/cpuset/system-background/tasks
-
 service irsc_util /system/bin/irsc_util "/etc/sec_config"
     class core
     user root
@@ -622,12 +616,6 @@ service ipacm /system/bin/ipacm
     class main
     user net_admin
     group net_admin inet
-    writepid /dev/cpuset/system-background/tasks
-
-service qti /system/vendor/bin/qti
-    class main
-    user radio
-    group radio qcom_diag usb
     writepid /dev/cpuset/system-background/tasks
 
 service sensors /system/bin/sensors.qcom
