@@ -1,5 +1,7 @@
 allow init dash_device:chr_file { getattr };
 domain_trans(init, rootfs, dashd)
 
+allow init goodix_fp_device:chr_file getattr;
+
 allow init proc:lnk_file { setattr };
 allow init sysfs_fpc_home:file { setattr };

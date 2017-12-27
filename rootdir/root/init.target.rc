@@ -175,6 +175,11 @@ on boot
     chmod 0666 /dev/dash
     restorecon  /dev/dash
 
+    # Goodix fingerprint
+    chmod 0660 /dev/goodix_fp
+    chown system system /dev/goodix_fp
+    restorecon /dev/goodix_fp
+
     # RGB light
     chown system system /sys/class/leds/red/pause_lo
     chown system system /sys/class/leds/blue/pause_lo

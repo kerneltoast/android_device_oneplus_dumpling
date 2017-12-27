@@ -14,6 +14,7 @@
 
 # dev
 /dev/dash                                                       u:object_r:dash_device:s0
+/dev/goodix_fp                                                  u:object_r:goodix_fp_device:s0
 
 # data
 /data/misc/netmgr(/.*)?                                         u:object_r:net_data_file:s0

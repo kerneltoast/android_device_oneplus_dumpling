@@ -1,1 +1,2 @@
 type dash_device, dev_type;
+type goodix_fp_device, dev_type;
