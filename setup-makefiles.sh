@@ -17,7 +17,7 @@
 
 set -e
 
-DEVICE=cheeseburger
+DEVICE=dumpling
 VENDOR=oneplus
 
 INITIAL_COPYRIGHT_YEAR=2017

@@ -18,7 +18,7 @@
 
 set -e
 
-DEVICE=cheeseburger
+DEVICE=dumpling
 VENDOR=oneplus
 
 # Load extract_utils and do some sanity checks

@@ -22,7 +22,7 @@
 # definition file).
 #
 
-$(call inherit-product, vendor/oneplus/cheeseburger/cheeseburger-vendor.mk)
+$(call inherit-product, vendor/oneplus/dumpling/dumpling-vendor.mk)
 
 # Overlays
 DEVICE_PACKAGE_OVERLAYS += $(LOCAL_PATH)/overlay
@@ -304,7 +304,7 @@ PRODUCT_COPY_FILES += \
 
 # Recovery
 PRODUCT_PACKAGES += \
-    librecovery_updater_cheeseburger
+    librecovery_updater_dumpling
 
 # RIL
 PRODUCT_PACKAGES += \
