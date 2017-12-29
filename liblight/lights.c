@@ -270,6 +270,13 @@ set_speaker_light_locked(struct light_device_t* dev,
     blue = colorRGB & 0xFF;
     blink = onMS > 0 && offMS > 0;
 
+    // red LED is weaker than the others, so reduce the brightness of the
+    // others when there is color mixing
+    if (red) {
+        green /= 2;
+        blue /= 2;
+    }
+
     // disable all blinking to start
     write_int(RGB_BLINK_FILE, 0);
 
