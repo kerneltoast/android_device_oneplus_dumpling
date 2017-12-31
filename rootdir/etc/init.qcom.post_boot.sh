@@ -2319,11 +2319,6 @@ case "$target" in
 	echo 1 > /sys/devices/system/cpu/cpu4/core_ctl/is_big_cluster
 	echo 4 > /sys/devices/system/cpu/cpu4/core_ctl/task_thres
 
-	# Enable Adaptive LMK
-        echo 1 > /sys/module/lowmemorykiller/parameters/enable_adaptive_lmk
-        echo "18432,23040,27648,51256,150296,200640" > /sys/module/lowmemorykiller/parameters/minfree
-        echo 162500 > /sys/module/lowmemorykiller/parameters/vmpressure_file_min
-
 	# Setting b.L scheduler parameters
 	echo 1 > /proc/sys/kernel/sched_migration_fixup
 	echo 95 > /proc/sys/kernel/sched_upmigrate
@@ -2335,10 +2330,6 @@ case "$target" in
 	echo 400000 > /proc/sys/kernel/sched_freq_dec_notify
 	echo 5 > /proc/sys/kernel/sched_spill_nr_run
 	echo 1 > /proc/sys/kernel/sched_restrict_cluster_spill
-	start iop
-
-        # disable thermal bcl hotplug to switch governor
-        echo 0 > /sys/module/msm_thermal/core_control/enabled
 
         # online CPU0
         echo 1 > /sys/devices/system/cpu/cpu0/online
@@ -2347,15 +2338,16 @@ case "$target" in
 	echo 1 > /sys/devices/system/cpu/cpu0/cpufreq/interactive/use_sched_load
 	echo 1 > /sys/devices/system/cpu/cpu0/cpufreq/interactive/use_migration_notif
 	echo 19000 > /sys/devices/system/cpu/cpu0/cpufreq/interactive/above_hispeed_delay
-	echo 90 > /sys/devices/system/cpu/cpu0/cpufreq/interactive/go_hispeed_load
+	echo 70 > /sys/devices/system/cpu/cpu0/cpufreq/interactive/go_hispeed_load
 	echo 20000 > /sys/devices/system/cpu/cpu0/cpufreq/interactive/timer_rate
 	echo 1248000 > /sys/devices/system/cpu/cpu0/cpufreq/interactive/hispeed_freq
 	echo 1 > /sys/devices/system/cpu/cpu0/cpufreq/interactive/io_is_busy
-	echo "83 1804800:95" > /sys/devices/system/cpu/cpu0/cpufreq/interactive/target_loads
-	echo 19000 > /sys/devices/system/cpu/cpu0/cpufreq/interactive/min_sample_time
-	echo 79000 > /sys/devices/system/cpu/cpu0/cpufreq/interactive/max_freq_hysteresis
+	echo "85 1400000:31 1600000:45 1800000:66 1900000:93" > /sys/devices/system/cpu/cpu0/cpufreq/interactive/target_loads
+	echo 40000 > /sys/devices/system/cpu/cpu0/cpufreq/interactive/min_sample_time
+	echo 100000 > /sys/devices/system/cpu/cpu0/cpufreq/interactive/max_freq_hysteresis
 	echo 300000 > /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq
 	echo 1 > /sys/devices/system/cpu/cpu0/cpufreq/interactive/ignore_hispeed_on_notif
+	echo 1 > /sys/devices/system/cpu/cpu0/cpufreq/interactive/enable_prediction
         # online CPU4
         echo 1 > /sys/devices/system/cpu/cpu4/online
 	# configure governor settings for big cluster
@@ -2363,22 +2355,17 @@ case "$target" in
 	echo 1 > /sys/devices/system/cpu/cpu4/cpufreq/interactive/use_sched_load
 	echo 1 > /sys/devices/system/cpu/cpu4/cpufreq/interactive/use_migration_notif
 	echo 19000 > /sys/devices/system/cpu/cpu4/cpufreq/interactive/above_hispeed_delay
-	echo 90 > /sys/devices/system/cpu/cpu4/cpufreq/interactive/go_hispeed_load
+	echo 70 > /sys/devices/system/cpu/cpu4/cpufreq/interactive/go_hispeed_load
 	echo 20000 > /sys/devices/system/cpu/cpu4/cpufreq/interactive/timer_rate
-	echo 1574400 > /sys/devices/system/cpu/cpu4/cpufreq/interactive/hispeed_freq
+	echo 1267200 > /sys/devices/system/cpu/cpu4/cpufreq/interactive/hispeed_freq
 	echo 1 > /sys/devices/system/cpu/cpu4/cpufreq/interactive/io_is_busy
-	echo "83 1939200:90 2016000:95" > /sys/devices/system/cpu/cpu4/cpufreq/interactive/target_loads
-	echo 19000 > /sys/devices/system/cpu/cpu4/cpufreq/interactive/min_sample_time
-	echo 79000 > /sys/devices/system/cpu/cpu4/cpufreq/interactive/max_freq_hysteresis
+	echo "87 1400000:31 1600000:45 1800000:66 1900000:93" > /sys/devices/system/cpu/cpu4/cpufreq/interactive/target_loads
+	echo 40000 > /sys/devices/system/cpu/cpu4/cpufreq/interactive/min_sample_time
+	echo 100000 > /sys/devices/system/cpu/cpu4/cpufreq/interactive/max_freq_hysteresis
 	echo 300000 > /sys/devices/system/cpu/cpu4/cpufreq/scaling_min_freq
 	echo 1 > /sys/devices/system/cpu/cpu4/cpufreq/interactive/ignore_hispeed_on_notif
+	echo 1 > /sys/devices/system/cpu/cpu4/cpufreq/interactive/enable_prediction
 
-        # re-enable thermal and BCL hotplug
-        echo 1 > /sys/module/msm_thermal/core_control/enabled
-
-        # Enable input boost configuration
-        echo "0:1324800" > /sys/module/cpu_boost/parameters/input_boost_freq
-        echo 100 > /sys/module/cpu_boost/parameters/input_boost_ms
         # Enable bus-dcvs
         for cpubw in /sys/class/devfreq/*qcom,cpubw*
         do
@@ -2398,70 +2385,6 @@ case "$target" in
             echo 1600 > $cpubw/bw_hwmon/idle_mbps
         done
 
-        for memlat in /sys/class/devfreq/*qcom,memlat-cpu*
-        do
-            echo "mem_latency" > $memlat/governor
-            echo 10 > $memlat/polling_interval
-            echo 400 > $memlat/mem_latency/ratio_ceil
-        done
-        echo "cpufreq" > /sys/class/devfreq/soc:qcom,mincpubw/governor
-	if [ -f /sys/devices/soc0/soc_id ]; then
-		soc_id=`cat /sys/devices/soc0/soc_id`
-	else
-		soc_id=`cat /sys/devices/system/soc/soc0/id`
-	fi
-
-	if [ -f /sys/devices/soc0/hw_platform ]; then
-		hw_platform=`cat /sys/devices/soc0/hw_platform`
-	else
-		hw_platform=`cat /sys/devices/system/soc/soc0/hw_platform`
-	fi
-
-	if [ -f /sys/devices/soc0/platform_subtype_id ]; then
-		 platform_subtype_id=`cat /sys/devices/soc0/platform_subtype_id`
-	fi
-
-	if [ -f /sys/devices/soc0/platform_version ]; then
-		platform_version=`cat /sys/devices/soc0/platform_version`
-		platform_major_version=$((10#${platform_version}>>16))
-	fi
-
-	case "$soc_id" in
-		"292") #msm8998
-		# Start Host based Touch processing
-		case "$hw_platform" in
-		"QRD")
-			case "$platform_subtype_id" in
-				"0")
-					start hbtp
-					;;
-				"16")
-					if [ $platform_major_version -lt 6 ]; then
-						start hbtp
-					fi
-					;;
-			esac
-
-			echo 0 > /sys/class/graphics/fb1/hpd
-			;;
-		"Surf")
-			case "$platform_subtype_id" in
-				"1")
-					start hbtp
-				;;
-			esac
-			;;
-		"MTP")
-			case "$platform_subtype_id" in
-				"2")
-					start hbtp
-				;;
-			esac
-			;;
-		esac
-	    ;;
-	esac
-
 	echo N > /sys/module/lpm_levels/system/pwr/cpu0/ret/idle_enabled
 	echo N > /sys/module/lpm_levels/system/pwr/cpu1/ret/idle_enabled
 	echo N > /sys/module/lpm_levels/system/pwr/cpu2/ret/idle_enabled
@@ -2475,20 +2398,31 @@ case "$target" in
 	echo N > /sys/module/lpm_levels/system/perf/perf-l2-dynret/idle_enabled
 	echo N > /sys/module/lpm_levels/system/perf/perf-l2-ret/idle_enabled
 	echo N > /sys/module/lpm_levels/parameters/sleep_disabled
-        echo 0-2 > /dev/cpuset/background/cpus
-        echo 0-5 > /dev/cpuset/system-background/cpus
-        echo 0 > /proc/sys/kernel/sched_boost
+	echo 0-7 > /dev/cpuset/top-app/cpus
+	echo 4-7 > /dev/cpuset/foreground/boost/cpus
+	echo 0-1 > /dev/cpuset/background/cpus
+	echo 0-3 > /dev/cpuset/system-background/cpus 0-2
 
-	#if [ -f "/defrag_aging.ko" ]; then
-	#	insmod /defrag_aging.ko
-	#else
-	#	insmod /system/lib/modules/defrag.ko
-	#fi
-    sleep 1
-	#lsmod | grep defrag
-	#if [ $? != 0 ]; then
-	#	echo 1 > /sys/module/defrag_helper/parameters/disable
-	#fi
+	# Input boost configuration
+	echo "1248000 1344000" > /sys/kernel/cpu_input_boost/ib_freqs
+	echo 1400 > /sys/kernel/cpu_input_boost/ib_duration_ms
+	echo 1 > /sys/kernel/cpu_input_boost/enabled
+
+	# Set thermal restrictions
+	echo 0 > /sys/kernel/msm_thermal/enabled
+	echo "1478400 1804800 40 38" > /sys/kernel/msm_thermal/zone0
+	echo "1401600 1728000 41 40" > /sys/kernel/msm_thermal/zone1
+	echo "1324800 1651200 42 41" > /sys/kernel/msm_thermal/zone2
+	echo "1248000 1574400 43 42" > /sys/kernel/msm_thermal/zone3
+	echo "1171200 1497600 44 43" > /sys/kernel/msm_thermal/zone4
+	echo "1094400 1420800 46 44" > /sys/kernel/msm_thermal/zone5
+	echo "1036800 1190400 48 46" > /sys/kernel/msm_thermal/zone6
+	echo "960000 979200 53 50" > /sys/kernel/msm_thermal/zone7
+	echo "729600 729600 65 60" > /sys/kernel/msm_thermal/zone8
+	echo 8000 > /sys/kernel/msm_thermal/sampling_ms
+	echo 1 > /sys/kernel/msm_thermal/enabled
+
+	echo 0 > /proc/sys/kernel/sched_boost
     ;;
 esac
 
