@@ -185,6 +185,10 @@ on boot
     write /sys/bus/msm_subsys/devices/subsys4/restart_level "related"
     write /sys/bus/msm_subsys/devices/subsys5/restart_level "related"
 
+    # Energy Awareness
+    chown system system /sys/module/msm_core/parameters/disabled
+    chown system system /sys/module/msm_core/parameters/polling_interval
+
 # msm specific files that need to be created on /data
 on post-fs-data
     #Create directories for Fingerprint
