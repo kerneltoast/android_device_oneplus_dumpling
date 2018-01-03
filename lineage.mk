@@ -41,3 +41,6 @@ PRODUCT_BUILD_PROP_OVERRIDES += \
     BUILD_FINGERPRINT=OnePlus/OnePlus5/OnePlus5:7.1.1/NMF26X/11280212:user/release-keys
 
 TARGET_VENDOR := oneplus
+
+# Unofficial build ID
+TARGET_UNOFFICIAL_BUILD_ID := Sultan
