@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 The LineageOS Project
+ * Copyright (C) 2018 Jason A. Donenfeld <Jason@zx2c4.com>. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,9 +14,25 @@
  * limitations under the License.
  */
 
-extern "C" {
+#include <stddef.h>
+#include <dlfcn.h>
+
+/* Real symbol lookups: */
+
+static int (*_strncmp)(const char *, const char *, size_t);
+static void shim_init(void) __attribute__((constructor))
+{
+	_strncmp = dlsym(RTLD_NEXT, "strncmp");
+}
+
+/* The shims: */
 
 const char *_ZN7android18gClientPackageNameE;
 const char *_ZN7android18lClientPackageNameE;
 
+int strncmp(const char *first, const char *second, size_t n)
+{
+	if (!_strncmp("com.oneplus.camera", first, 18) || !_strncmp("com.oneplus.camera", second, 18))
+		return 0;
+	return _strncmp(first, second, n);
 }
