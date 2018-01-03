@@ -8,4 +8,19 @@ allow qti_init_shell kmsg_device:chr_file {
     open
 };
 
+allow qti_init_shell camera_data_file:dir {
+    read
+    setattr
+    getattr
+    open
+    rmdir
+    remove_name
+    search
+};
+
+allow qti_init_shell system_data_file:lnk_file {
+    unlink
+    create
+};
+
 qmux_socket(qti_init_shell)
