@@ -17,24 +17,15 @@
 -->
 
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-
     <!-- Default action ids for a device's touchscreen gestures
          The array should be sorted in the same order as the
-         touchscreen gestures advertised by the device's MKHW impl. -->
+         touchscreen gestures advertised by the device's CMHW impl. -->
     <integer-array name="config_defaultTouchscreenGestureActions">
-        <item>4</item><!-- up_arrow: ACTION_DIALER -->
-        <item>2</item><!-- down_arrow: ACTION_CAMERA -->
-        <item>8</item><!-- left_arrow: ACTION_PREVIOUS_TRACK -->
-        <item>9</item><!-- right_arrow: ACTION_NEXT_TRACK -->
-        <item>7</item><!-- two_finger_down_swipe: ACTION_PLAY_PAUSE_MUSIC -->
-        <item>0</item><!-- one_finger_up_swipe: none -->
-        <item>0</item><!-- one_finger_down_swipe: none -->
-        <item>0</item><!-- one_finger_left_swipe: none -->
-        <item>0</item><!-- one_finger_right_swipe: none -->
-        <item>1</item><!-- letter_o: ACTION_FLASHLIGHT -->
-        <item>0</item><!-- letter_w: none -->
-        <item>0</item><!-- letter_m: none -->
-        <item>0</item><!-- letter_s: none -->
+        <item>4</item>
+        <item>2</item>
+        <item>8</item>
+        <item>9</item>
+        <item>7</item>
+        <item>1</item>
     </integer-array>
-
 </resources>
