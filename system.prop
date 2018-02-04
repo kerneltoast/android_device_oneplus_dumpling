@@ -70,10 +70,6 @@ persist.ts.rtmakeup=false
 # CNE (needed for IMS)
 persist.cne.feature=1
 
-# Core control
-ro.core_ctl_min_cpu=2
-ro.core_ctl_max_cpu=4
-
 # Data
 ro.use_data_netmgrd=true
 persist.data.netmgrd.qos.enable=true

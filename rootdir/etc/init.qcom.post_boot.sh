@@ -2312,6 +2312,7 @@ esac
 case "$target" in
     "msm8998")
 
+	echo 2 > /sys/devices/system/cpu/cpu0/core_ctl/min_cpus
 	echo 2 > /sys/devices/system/cpu/cpu4/core_ctl/min_cpus
 	echo 60 > /sys/devices/system/cpu/cpu4/core_ctl/busy_up_thres
 	echo 30 > /sys/devices/system/cpu/cpu4/core_ctl/busy_down_thres
