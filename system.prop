@@ -38,6 +38,8 @@ fm.a2dp.conc.disabled=true
 audio.noisy.broadcast.delay=600
 audio.adm.buffering.ms=3
 persist.dirac.acs.controller=qem
+ro.config.vc_call_vol_steps=8
+ro.config.media_vol_steps=20
 
 # Battery
 ro.cutoff_voltage_mv=3200
