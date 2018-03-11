@@ -2319,6 +2319,8 @@ case "$target" in
 	echo 100 > /sys/devices/system/cpu/cpu4/core_ctl/offline_delay_ms
 	echo 1 > /sys/devices/system/cpu/cpu4/core_ctl/is_big_cluster
 	echo 4 > /sys/devices/system/cpu/cpu4/core_ctl/task_thres
+	echo "0 0 1 1" > /sys/devices/system/cpu/cpu0/core_ctl/not_preferred
+	echo "0 0 1 1" > /sys/devices/system/cpu/cpu4/core_ctl/not_preferred
 
 	# Setting b.L scheduler parameters
 	echo 1 > /proc/sys/kernel/sched_migration_fixup
